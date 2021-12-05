@@ -1,15 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
-    public static float gravity = -40;
+    public static int gravity = -40;
 
+    private int battlePower;
     private float startSpeed;
     private float maxSpeed;
 
-    private float airControlPercent = 1f;
     private float turnSmoothTime = 0.2f;
     private float fastSmooth = 0.3f;
     private float slowSmooth = 0.8f;
@@ -29,10 +27,11 @@ public class Controller : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start() {
-
-        startSpeed = 2f;
-        maxSpeed = 10f;
+    void Start() 
+    {
+        battlePower = player.currentPower;
+        startSpeed = 2f * battlePower;
+        maxSpeed = 10f * battlePower;
 
         animator = GetComponent<Animator> ();
         cameraT = Camera.main.transform;
@@ -45,9 +44,11 @@ public class Controller : MonoBehaviour
     void Update() 
     {
         player.isGrounded = characterController.isGrounded;
-        startSpeed = 2f;
-        maxSpeed = 10f;
-        jump.jump();
+        battlePower = player.currentPower;
+        startSpeed = 0.001f * battlePower;
+        maxSpeed = 0.005f * battlePower;
+
+        jump.jump(1);
 
         //Player Input
         Vector2 inputDir;
@@ -65,7 +66,7 @@ public class Controller : MonoBehaviour
         Move(inputDir);
 
         //Animator
-        float animationSpeedPercent = ((player.overDrive) ? currentVelocity / (maxSpeed * fastSmooth) : currentVelocity / startSpeed * fastSmooth);
+        float animationSpeedPercent = ((player.overDriving) ? currentVelocity / (maxSpeed * fastSmooth) : currentVelocity / startSpeed * fastSmooth);
         if (Input.GetKey(KeyCode.LeftShift)) speedSmoothTime = fastSmooth; 
         else speedSmoothTime = slowSmooth;
         animator.SetFloat("speedPercent", animationSpeedPercent, speedSmoothTime, Time.deltaTime);
@@ -119,18 +120,16 @@ public class Controller : MonoBehaviour
         
     }
 
-
-
     float GetModifiedSmoothTime(float smoothTime) {
         if (characterController.isGrounded) {
             return smoothTime;
         }
 
-        if (airControlPercent == 0) {
+        if (player.airControlPercent == 0) {
             return float.MaxValue;
         }
 
-        return smoothTime / airControlPercent;
+        return smoothTime / player.airControlPercent;
     }
 }
 

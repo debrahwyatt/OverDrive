@@ -1,62 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+    public int currentHealth;
+    public int currentMana;
+    public int currentPower = 10000;
+
     public HealthBar healthBar;
     private int maxHealth = 10000;
-    public int currentHealth;
 
     public ManaBar manaBar;
     private int maxMana = 10000;
-    public int currentMana;
 
     public PowerBar powerBar;
-    private int basePower = 10000;
-    public int currentPower = 10000;
-    private int maxPower = 10000;
+    public int basePower = 10000;
+    public int maxPower = 20000;
+
+    public float airControlPercent = 1f;
 
     public Transform projectileStart;
     public Transform target;
 
     public bool jumping = false;
     public bool flying = false;
-    public bool overDrive = false;
+    public bool overDriving = false;
     public bool poweringUp = false;
     public bool isGrounded = true;
 
     [SerializeField] private Transform pfBullet;
 
     public Controller thisPlayer;
+    public OverDrive overDrive;
 
     void Start() {
 
         currentHealth = maxHealth;
         currentMana = maxMana;
-
         currentPower = basePower;
-
-        //overDrivePower = basePower * 2;
 
         healthBar.SetMaxHealth(maxHealth);
         manaBar.SetMaxMana(maxMana);
-        powerBar.SetMaxPower(maxPower);
+        powerBar.SetMinMaxPower(basePower, maxPower);
         powerBar.SetPower(basePower);
-
-
     }
 
     private int frames = 0;
     void Update() 
     {
-        // Gameplay Methods
-        // JumpUp(0);
-        // OverDrive(5);
-        // ChargeUp(10);
-        // Fly(1);
 
-        //if (overDrive) OverDrive(5, 5);
         // Constant Mana Regen
         frames++;
         if (frames == 1)
@@ -64,7 +55,9 @@ public class Player : MonoBehaviour {
             frames = 0;
             ManaAdjust(2);
         }
-        powerBar.SetPower(basePower);
+
+        overDrive.overDrive(5, 5, 2);
+        
 
         if (Input.GetKeyDown(KeyCode.G)) TakeDamage(20);
    
@@ -86,15 +79,15 @@ public class Player : MonoBehaviour {
             currentMana += difference;
             manaBar.SetMana(currentMana);
         }
+        else
+        {
+            currentMana = maxMana;
+        }
     }
 
-    public void OverDrive(int powerGain, int powerReduction)
+    public void SetPower(int power)
     {
-        //never add more than the max
-        if (currentPower < maxPower && overDrive) currentPower += powerGain;
-        if (currentPower > basePower && !overDrive) currentPower -= powerReduction;
-        powerBar.SetPower(currentPower);
-        Debug.Log(currentPower);
+        powerBar.SetPower(power);
     }
 
     // Update is called once per frame
@@ -108,12 +101,5 @@ public class Player : MonoBehaviour {
             bulletTransform.GetComponent<Projectile>().Setup(shootDir);
         }
     }
-
-
-    public bool GetOverDrive()
-    {
-        return overDrive;
-    }
-
 }
 

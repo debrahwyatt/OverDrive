@@ -1,30 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Jump : MonoBehaviour
 {
-    public float jumpVelocity;
     private int gravity = -40;
-    private int jumpCost = 1;
+
+    public float jumpVelocity;
     public Controller controller;
     public Player player;
 
     // Update is called once per frame
-    public void jump()
+    public void jump(int jumpCost = 0)
     {
         bool jumping = player.jumping;
         float velocityY = controller.velocityY;
-        float jumpFactor = 0.0001f;
+        float jumpFactor = 0.0025f;
         float maxJumpHeight = player.currentPower * jumpFactor;
 
         if (velocityY <= 0) jumping = false;
-        if (Input.GetKeyDown(KeyCode.Space) && player.isGrounded
-)
+        if (Input.GetKeyDown(KeyCode.Space) && player.isGrounded)
         {
             jumping = true;
-            player.ManaAdjust(-jumpCost);
-
             jumpVelocity = Mathf.Sqrt(-2 * gravity * maxJumpHeight);
             velocityY = jumpVelocity;
         }
@@ -33,11 +28,14 @@ public class Jump : MonoBehaviour
             if (!player.isGrounded && jumping == true)
             {
                 jumping = false;
+
                 jumpVelocity = Mathf.Sqrt(-2 * gravity);
                 velocityY = jumpVelocity;
             }
         }
         controller.velocityY = velocityY;
         player.jumping = jumping;
+        if (player.jumping == true) player.ManaAdjust(-jumpCost);
+
     }
 }
