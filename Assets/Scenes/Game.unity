@@ -1371,7 +1371,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1402139b194a9d47bd8fdad18a5f852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisPlayer: {fileID: 888536540}
+  velocityY: 0
+  player: {fileID: 888536540}
+  jump: {fileID: 888536543}
 --- !u!114 &888536540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1385,21 +1387,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 1911435075}
-  maxHealth: 10000
   currentHealth: 10000
   manaBar: {fileID: 285744803}
-  maxMana: 10000
   currentMana: 10000
   powerBar: {fileID: 2088545260}
-  basePower: 10000
   currentPower: 10000
-  maxPower: 20000
   projectileStart: {fileID: 550679592}
   target: {fileID: 199914875}
-  jumpingUp: 0
+  jumping: 0
   flying: 0
   overDrive: 0
   poweringUp: 0
+  isGrounded: 1
   pfBullet: {fileID: 8044150410664991409, guid: 0eac2b0623d5fe3408f6da29fccce438, type: 3}
   thisPlayer: {fileID: 888536539}
 --- !u!114 &888536541
@@ -1415,6 +1414,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pfBullet: {fileID: 8044150410664991409, guid: 0eac2b0623d5fe3408f6da29fccce438, type: 3}
+--- !u!114 &888536543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888536536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fade1a1222414234f9d8497e21e1f505, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpVelocity: 0
+  controller: {fileID: 888536539}
+  player: {fileID: 888536540}
 --- !u!1001 &899395394
 PrefabInstance:
   m_ObjectHideFlags: 0

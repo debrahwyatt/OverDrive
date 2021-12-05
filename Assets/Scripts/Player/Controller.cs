@@ -2,36 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Controller : MonoBehaviour{
-    
-    float startSpeed;
-    float staticMaxSpeed;
-    float maxSpeed;
-    float overDriveSpeed;
+public class Controller : MonoBehaviour
+{
+    public static float gravity = -40;
 
-    static float gravity = -40;
-    private float playerGravity = gravity;
+    private float startSpeed;
+    private float maxSpeed;
 
-    //[Range(0,1)]
-    float airControlPercent = 1f;
-
-    float turnSmoothTime = 0.2f;
-    float fastSmooth = 0.3f;
-    float slowSmooth = 0.8f;
-    float turnSmoothVelocity;
-
-    float speedSmoothTime = 1f;
-    float speedSmoothVelocity;
+    private float airControlPercent = 1f;
+    private float turnSmoothTime = 0.2f;
+    private float fastSmooth = 0.3f;
+    private float slowSmooth = 0.8f;
+    private float turnSmoothVelocity;
+    private float speedSmoothTime = 1f;
+    private float speedSmoothVelocity;
 
     float currentVelocity;
-    float velocityY;
+    public float velocityY;
     float maxVelocity;
 
+    public Player player;
+    CharacterController characterController;
     Animator animator;
     Transform cameraT;
-    CharacterController controller;
-
-    public Player thisPlayer;
+    public Jump jump;
 
 
     // Start is called before the first frame update
@@ -42,7 +36,7 @@ public class Controller : MonoBehaviour{
 
         animator = GetComponent<Animator> ();
         cameraT = Camera.main.transform;
-        controller = GetComponent<CharacterController> ();
+        characterController = GetComponent<CharacterController> ();
  
     }
 
@@ -50,13 +44,14 @@ public class Controller : MonoBehaviour{
     // Update is called once per frame
     void Update() 
     {
-
+        player.isGrounded = characterController.isGrounded;
         startSpeed = 2f;
         maxSpeed = 10f;
+        jump.jump();
 
         //Player Input
         Vector2 inputDir;
-        if (thisPlayer.poweringUp) inputDir = new Vector2(0, 0);
+        if (player.poweringUp) inputDir = new Vector2(0, 0);
         else
         {
             Vector2 input = new Vector2(
@@ -70,7 +65,7 @@ public class Controller : MonoBehaviour{
         Move(inputDir);
 
         //Animator
-        float animationSpeedPercent = ((thisPlayer.overDrive) ? currentVelocity / (maxSpeed * fastSmooth) : currentVelocity / startSpeed * fastSmooth);
+        float animationSpeedPercent = ((player.overDrive) ? currentVelocity / (maxSpeed * fastSmooth) : currentVelocity / startSpeed * fastSmooth);
         if (Input.GetKey(KeyCode.LeftShift)) speedSmoothTime = fastSmooth; 
         else speedSmoothTime = slowSmooth;
         animator.SetFloat("speedPercent", animationSpeedPercent, speedSmoothTime, Time.deltaTime);
@@ -95,7 +90,7 @@ public class Controller : MonoBehaviour{
         }
 
         // calculating the current max velocity
-        if(controller.isGrounded == true)
+        if(characterController.isGrounded == true)
         {
             maxVelocity = maxSpeed * inputDir.magnitude;
         }
@@ -113,21 +108,21 @@ public class Controller : MonoBehaviour{
 
         //Enables player gravity
         Vector3 velocity;
-        velocityY += Time.deltaTime * playerGravity;
+        velocityY += Time.deltaTime * gravity;
         velocity = transform.forward * currentVelocity + Vector3.up * velocityY;
 
         //Combines z/x velocity with y velocity
-        controller.Move(velocity * Time.deltaTime);
-        currentVelocity = new Vector2(controller.velocity.x, controller.velocity.z).magnitude;
+        characterController.Move(velocity * Time.deltaTime);
+        currentVelocity = new Vector2(characterController.velocity.x, characterController.velocity.z).magnitude;
 
-        if (controller.isGrounded) velocityY = 0;
+        if (characterController.isGrounded) velocityY = 0;
         
     }
 
 
 
     float GetModifiedSmoothTime(float smoothTime) {
-        if (controller.isGrounded) {
+        if (characterController.isGrounded) {
             return smoothTime;
         }
 

@@ -5,25 +5,26 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
     public HealthBar healthBar;
-    public int maxHealth = 10000;
+    private int maxHealth = 10000;
     public int currentHealth;
 
     public ManaBar manaBar;
-    public int maxMana = 10000;
+    private int maxMana = 10000;
     public int currentMana;
 
     public PowerBar powerBar;
-    public int basePower = 10000;
+    private int basePower = 10000;
     public int currentPower = 10000;
-    public int maxPower = 10000;
+    private int maxPower = 10000;
 
     public Transform projectileStart;
     public Transform target;
 
-    public bool jumpingUp = false;
+    public bool jumping = false;
     public bool flying = false;
     public bool overDrive = false;
     public bool poweringUp = false;
+    public bool isGrounded = true;
 
     [SerializeField] private Transform pfBullet;
 
