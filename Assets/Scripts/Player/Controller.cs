@@ -23,7 +23,9 @@ public class Controller : MonoBehaviour
     CharacterController characterController;
     Animator animator;
     Transform cameraT;
+
     public Jump jump;
+    public Ki ki;
 
 
     // Start is called before the first frame update
@@ -49,6 +51,7 @@ public class Controller : MonoBehaviour
         maxSpeed = 0.005f * battlePower;
 
         jump.jump(1);
+        ki.Charging(player.chargeRate);
 
         //Player Input
         Vector2 inputDir;
@@ -109,7 +112,7 @@ public class Controller : MonoBehaviour
 
         //Enables player gravity
         Vector3 velocity;
-        velocityY += Time.deltaTime * gravity;
+        velocityY += Time.deltaTime * player.gravity;
         velocity = transform.forward * currentVelocity + Vector3.up * velocityY;
 
         //Combines z/x velocity with y velocity

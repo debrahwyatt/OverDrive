@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class Jump : MonoBehaviour
 {
-    private int gravity = -40;
-
     public float jumpVelocity;
     public Controller controller;
     public Player player;
@@ -20,7 +18,7 @@ public class Jump : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && player.isGrounded)
         {
             jumping = true;
-            jumpVelocity = Mathf.Sqrt(-2 * gravity * maxJumpHeight);
+            jumpVelocity = Mathf.Sqrt(-2 * player.gravity * maxJumpHeight);
             velocityY = jumpVelocity;
         }
         if (Input.GetKeyUp(KeyCode.Space) && jumping)
@@ -29,13 +27,12 @@ public class Jump : MonoBehaviour
             {
                 jumping = false;
 
-                jumpVelocity = Mathf.Sqrt(-2 * gravity);
+                jumpVelocity = Mathf.Sqrt(-2 * player.gravity);
                 velocityY = jumpVelocity;
             }
         }
         controller.velocityY = velocityY;
         player.jumping = jumping;
         if (player.jumping == true) player.ManaAdjust(-jumpCost);
-
     }
 }

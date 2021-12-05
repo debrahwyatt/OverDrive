@@ -4,17 +4,20 @@ public class Player : MonoBehaviour {
 
     public int currentHealth;
     public int currentMana;
-    public int currentPower = 10000;
+    public int currentPower;
+    public int gravity;
+
 
     public HealthBar healthBar;
-    private int maxHealth = 10000;
-
     public ManaBar manaBar;
-    private int maxMana = 10000;
-
     public PowerBar powerBar;
+
     public int basePower = 10000;
     public int maxPower = 20000;
+    private int maxHealth = 10000;
+    private int maxMana = 10000;
+
+    public int chargeRate;
 
     public float airControlPercent = 1f;
 
@@ -31,12 +34,15 @@ public class Player : MonoBehaviour {
 
     public Controller thisPlayer;
     public OverDrive overDrive;
+    public Ki ki;
 
-    void Start() {
-
+    void Start() 
+    {
+        currentPower = basePower;
         currentHealth = maxHealth;
         currentMana = maxMana;
-        currentPower = basePower;
+        gravity = (int) -(currentPower * 0.005f);
+        chargeRate = 10;
 
         healthBar.SetMaxHealth(maxHealth);
         manaBar.SetMaxMana(maxMana);
@@ -44,19 +50,16 @@ public class Player : MonoBehaviour {
         powerBar.SetPower(basePower);
     }
 
-    private int frames = 0;
     void Update() 
     {
+        gravity = (int)-(currentPower * 0.005f);
 
-        // Constant Mana Regen
-        frames++;
-        if (frames == 1)
-        {
-            frames = 0;
-            ManaAdjust(2);
-        }
+        int overDriveCost = 10;
+        int overDriveGain = 10;
+        int overDriveLoss = 5;
+        ki.NaturalGain(5);
 
-        overDrive.overDrive(5, 5, 2);
+        overDrive.overDrive(overDriveCost, overDriveGain, overDriveLoss);
         
 
         if (Input.GetKeyDown(KeyCode.G)) TakeDamage(20);
