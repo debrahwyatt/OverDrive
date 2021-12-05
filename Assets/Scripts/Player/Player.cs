@@ -26,14 +26,14 @@ public class Player : MonoBehaviour {
 
     public bool jumping = false;
     public bool flying = false;
-    public bool overDriving = false;
+    public bool overDrive = false;
     public bool poweringUp = false;
     public bool isGrounded = true;
 
     [SerializeField] private Transform pfBullet;
 
     public Controller thisPlayer;
-    public OverDrive overDrive;
+    public OverDrive overDrive2;
     public Ki ki;
 
     void Start() 
@@ -42,7 +42,7 @@ public class Player : MonoBehaviour {
         currentHealth = maxHealth;
         currentMana = maxMana;
         gravity = (int) -(currentPower * 0.005f);
-        chargeRate = 10;
+        chargeRate = 12;
 
         healthBar.SetMaxHealth(maxHealth);
         manaBar.SetMaxMana(maxMana);
@@ -54,13 +54,12 @@ public class Player : MonoBehaviour {
     {
         gravity = (int)-(currentPower * 0.005f);
 
-        int overDriveCost = 10;
-        int overDriveGain = 10;
-        int overDriveLoss = 5;
         ki.NaturalGain(5);
 
-        overDrive.overDrive(overDriveCost, overDriveGain, overDriveLoss);
-        
+        int overDriveCost = 12;
+        int overDriveGain = 10;
+        int overDriveLoss = 2;
+        overDrive2.overDrive(overDriveCost, overDriveGain, overDriveLoss);
 
         if (Input.GetKeyDown(KeyCode.G)) TakeDamage(20);
    

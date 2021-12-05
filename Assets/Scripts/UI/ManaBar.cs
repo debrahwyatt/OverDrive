@@ -1,20 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
 
-public class ManaBar : MonoBehaviour 
+public class ManaBar : MonoBehaviour
 {
     public Slider slider;
 
-    public void SetMana(int mana) 
+    public void SetMana(int mana)
     {
         slider.value = mana;
     }
 
-    public void SetMaxMana(int mana) 
+    public void SetMaxMana(int max)
     {
-        slider.maxValue = mana;
-        slider.value = mana;
+        slider.maxValue = max;
     }
 }

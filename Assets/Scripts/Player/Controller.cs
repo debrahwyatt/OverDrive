@@ -69,7 +69,7 @@ public class Controller : MonoBehaviour
         Move(inputDir);
 
         //Animator
-        float animationSpeedPercent = ((player.overDriving) ? currentVelocity / (maxSpeed * fastSmooth) : currentVelocity / startSpeed * fastSmooth);
+        float animationSpeedPercent = ((player.overDrive) ? currentVelocity / (maxSpeed * fastSmooth) : currentVelocity / startSpeed * fastSmooth);
         if (Input.GetKey(KeyCode.LeftShift)) speedSmoothTime = fastSmooth; 
         else speedSmoothTime = slowSmooth;
         animator.SetFloat("speedPercent", animationSpeedPercent, speedSmoothTime, Time.deltaTime);
@@ -107,8 +107,10 @@ public class Controller : MonoBehaviour
             speedSmoothTime = slowSmooth;
         else speedSmoothTime = fastSmooth;
 
-        //Keeping the current velocity
-        currentVelocity = Mathf.SmoothDamp(currentVelocity, maxVelocity, ref speedSmoothVelocity, GetModifiedSmoothTime(speedSmoothTime));
+        if (player.overDrive) currentVelocity = maxVelocity;
+
+         //Keeping the current velocity
+         currentVelocity = Mathf.SmoothDamp(currentVelocity, maxVelocity, ref speedSmoothVelocity, GetModifiedSmoothTime(speedSmoothTime));
 
         //Enables player gravity
         Vector3 velocity;
