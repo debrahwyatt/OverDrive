@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
-    public static int gravity = -40;
-
     private int battlePower;
     private float startSpeed;
     private float maxSpeed;
@@ -15,7 +13,7 @@ public class Controller : MonoBehaviour
     private float speedSmoothTime = 1f;
     private float speedSmoothVelocity;
 
-    float currentVelocity;
+    public float currentVelocity;
     public float velocityY;
     float maxVelocity;
 
@@ -23,11 +21,7 @@ public class Controller : MonoBehaviour
     CharacterController characterController;
     Animator animator;
     Transform cameraT;
-
-    public Jump jump;
-    public Ki ki;
-
-
+    
     // Start is called before the first frame update
     void Start() 
     {
@@ -45,24 +39,29 @@ public class Controller : MonoBehaviour
     // Update is called once per frame
     void Update() 
     {
+        if (PauseMenu.GameIsPaused) return;
         player.isGrounded = characterController.isGrounded;
         battlePower = player.currentPower;
         startSpeed = 0.001f * battlePower;
         maxSpeed = 0.005f * battlePower;
 
-        jump.jump(1);
-        ki.Charging(player.chargeRate);
-
         //Player Input
-        Vector2 inputDir;
-        if (player.poweringUp) inputDir = new Vector2(0, 0);
+        Vector3 inputDir;
+        if (player.poweringUp) inputDir = new Vector3(0, 0, 0);
         else
         {
-            Vector2 input = new Vector2(
+/*            Vector2 input = new Vector2(
                 Input.GetAxisRaw("Horizontal"),
                 Input.GetAxisRaw("Vertical")
+            );*/
+
+            Vector3 input = new Vector3(
+            Input.GetAxisRaw("Horizontal"),
+            Input.GetAxisRaw("Vertical"),
+            Input.GetAxisRaw("Space") - Input.GetAxisRaw("CTRL")
             );
             inputDir = input.normalized;
+
         }
 
         //Call the movement script
@@ -77,10 +76,10 @@ public class Controller : MonoBehaviour
 
 
 
-    void Move(Vector2 inputDir) {
+    void Move(Vector3 inputDir) {
 
         // Orients controls based on camera perspective
-        if (inputDir != Vector2.zero)
+        if (inputDir != Vector3.zero)
         {
             float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg + cameraT.eulerAngles.y;
                        
@@ -94,7 +93,7 @@ public class Controller : MonoBehaviour
         }
 
         // calculating the current max velocity
-        if(characterController.isGrounded == true)
+        if(characterController.isGrounded == true || player.flying)
         {
             maxVelocity = maxSpeed * inputDir.magnitude;
         }
@@ -112,9 +111,12 @@ public class Controller : MonoBehaviour
          //Keeping the current velocity
          currentVelocity = Mathf.SmoothDamp(currentVelocity, maxVelocity, ref speedSmoothVelocity, GetModifiedSmoothTime(speedSmoothTime));
 
+        Debug.Log(inputDir[2]);
         //Enables player gravity
         Vector3 velocity;
         velocityY += Time.deltaTime * player.gravity;
+        if(player.flying) velocityY += Time.deltaTime * inputDir.z * currentVelocity;
+
         velocity = transform.forward * currentVelocity + Vector3.up * velocityY;
 
         //Combines z/x velocity with y velocity

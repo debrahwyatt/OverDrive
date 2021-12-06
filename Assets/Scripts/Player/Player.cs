@@ -18,31 +18,37 @@ public class Player : MonoBehaviour {
     private int maxMana = 10000;
 
     public int chargeRate;
+    private float chargeTime = 1f;
 
     public float airControlPercent = 1f;
 
-    public Transform projectileStart;
-    public Transform target;
-
+    public bool flying = true;
     public bool jumping = false;
-    public bool flying = false;
     public bool overDrive = false;
     public bool poweringUp = false;
     public bool isGrounded = true;
+    private bool projectileLocked = false;
+
+    public Transform projectileStart;
+    public Transform target;
 
     [SerializeField] private Transform pfBullet;
 
     public Controller thisPlayer;
     public OverDrive overDrive2;
     public Ki ki;
+    public Jump jump;
 
     void Start() 
     {
+        QualitySettings.vSyncCount = 0; // Disable vSync
+        Application.targetFrameRate = 60; // Set Framerate
+
         currentPower = basePower;
         currentHealth = maxHealth;
         currentMana = maxMana;
         gravity = (int) -(currentPower * 0.005f);
-        chargeRate = 12;
+        chargeRate = 25;
 
         healthBar.SetMaxHealth(maxHealth);
         manaBar.SetMaxMana(maxMana);
@@ -52,19 +58,23 @@ public class Player : MonoBehaviour {
 
     void Update() 
     {
-        gravity = (int)-(currentPower * 0.005f);
+        if (PauseMenu.GameIsPaused) return;
+        flying = true;
+        if (flying == true) gravity = 0;
+        else gravity = (int) -(currentPower * 0.005f);
 
-        ki.NaturalGain(5);
+        ki.NaturalGain(50);
+        jump.jump(1);
 
-        int overDriveCost = 12;
-        int overDriveGain = 10;
-        int overDriveLoss = 2;
+        chargeRate = 50;
+        ki.Charging(chargeRate);
+
+        int overDriveCost = 25;
+        int overDriveGain = 40;
+        int overDriveLoss = 4;
         overDrive2.overDrive(overDriveCost, overDriveGain, overDriveLoss);
+        PlayerShootProjectiles_OnShoot(10);
 
-        if (Input.GetKeyDown(KeyCode.G)) TakeDamage(20);
-   
-        PlayerShootProjectiles_OnShoot(200);
-    
     }
 
     void TakeDamage(int damage) 
@@ -95,12 +105,36 @@ public class Player : MonoBehaviour {
     // Update is called once per frame
     private void PlayerShootProjectiles_OnShoot(int cost)
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !PauseMenu.GameIsPaused && currentMana > cost)
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            projectileLocked = false;
+        }
+        if (Input.GetKey(KeyCode.Mouse0) && !PauseMenu.GameIsPaused && currentMana > cost)
         {
             ManaAdjust(-cost);
+            chargeTime += 0.1f;
+        }
+        if (Input.GetKeyUp(KeyCode.Mouse0) && !PauseMenu.GameIsPaused && projectileLocked == false)
+        {
+            Spawner();
+            projectileLocked = true;
+        }
+        if (Input.GetKey(KeyCode.Mouse0) && cost > currentMana && projectileLocked == false)
+        {
+            Spawner();
+            projectileLocked = true;
+        }
+
+        void Spawner()
+        {
+            int modifier = (int) (chargeTime * currentPower * 0.00012f);
+            Vector3 scale = new Vector3(modifier, modifier, modifier);
+            pfBullet.localScale = scale;
             Transform bulletTransform = Instantiate(pfBullet, projectileStart.position, Quaternion.identity);
+
             Vector3 shootDir = (target.position - projectileStart.position).normalized;
-            bulletTransform.GetComponent<Projectile>().Setup(shootDir);
+            bulletTransform.GetComponent<Projectile>().Setup(shootDir, chargeTime);
+            chargeTime = 1;
         }
     }
 }
