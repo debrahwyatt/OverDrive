@@ -329,7 +329,7 @@ Transform:
   m_GameObject: {fileID: 142436018}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 50, y: 1, z: 50}
+  m_LocalScale: {x: 1500, y: 1, z: 1500}
   m_Children: []
   m_Father: {fileID: 2051914339}
   m_RootOrder: 0
@@ -441,7 +441,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 963194228}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &285744801
 GameObject:
@@ -916,12 +916,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 550679591}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.65}
+  m_LocalRotation: {x: -0, y: 2.220446e-15, z: 0.000000007450588, w: 1}
+  m_LocalPosition: {x: 0, y: 0.01999998, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 963194228}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &578697101
 GameObject:
@@ -1303,7 +1303,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentVelocity: 0
   velocityY: 0
-  player: {fileID: 888536540}
 --- !u!114 &888536540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1320,38 +1319,22 @@ MonoBehaviour:
   currentMana: 10000
   currentPower: 10000
   gravity: 0
+  chargeRate: 12
+  basePower: 10000
+  maxPower: 20000
+  airControlPercent: 1
+  projectileChargeTime: 1
+  flying: 1
+  jumping: 0
+  overDriveOn: 0
+  poweringUp: 0
+  isGrounded: 0
+  projectileLocked: 0
   healthBar: {fileID: 1911435075}
   manaBar: {fileID: 285744803}
   powerBar: {fileID: 2088545260}
-  basePower: 10000
-  maxPower: 20000
-  chargeRate: 12
-  airControlPercent: 1
-  flying: 1
-  jumping: 0
-  overDrive: 0
-  poweringUp: 0
-  isGrounded: 1
   projectileStart: {fileID: 550679592}
   target: {fileID: 199914875}
-  pfBullet: {fileID: 8044150410664991409, guid: e28ae44b38629d94daa04c2ed0796f8d, type: 3}
-  thisPlayer: {fileID: 888536539}
-  overDrive2: {fileID: 888536544}
-  ki: {fileID: 888536542}
-  jump: {fileID: 888536543}
---- !u!114 &888536541
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 888536536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c72a897bc25b561429e1eac19aa9d49a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pfBullet: {fileID: 8044150410664991409, guid: e28ae44b38629d94daa04c2ed0796f8d, type: 3}
 --- !u!114 &888536542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1364,7 +1347,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bab03588e5bb68f4186616a8eb17d752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 888536540}
 --- !u!114 &888536543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1377,9 +1359,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fade1a1222414234f9d8497e21e1f505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpVelocity: 0
-  controller: {fileID: 888536539}
-  player: {fileID: 888536540}
 --- !u!114 &888536544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1392,8 +1371,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee590dcb47cec644781ad43ac2d8c963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 888536539}
-  player: {fileID: 888536540}
+--- !u!114 &888536545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888536536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72a897bc25b561429e1eac19aa9d49a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pfBullet: {fileID: 8044150410664991409, guid: e28ae44b38629d94daa04c2ed0796f8d, type: 3}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1445,7 +1435,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 10000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1472,11 +1462,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.22, z: -2.25}
+  m_LocalPosition: {x: 0, y: 1.22, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 550679592}
   - {fileID: 199914875}
+  - {fileID: 550679592}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1494,10 +1484,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lockCursor: 1
   mouseSensativity: 10
-  target: {fileID: 515278480}
-  dstFromTarget: 2
-  pitchMinMax: {x: -40, y: 85}
+  dstFromTarget: 3
   rotationSmoothTime: 0.12
+  target: {fileID: 515278480}
 --- !u!1 &1042431654
 GameObject:
   m_ObjectHideFlags: 0
@@ -1753,8 +1742,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee590dcb47cec644781ad43ac2d8c963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 1180568998}
-  player: {fileID: 1180568997}
 --- !u!114 &1180568994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1767,9 +1754,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fade1a1222414234f9d8497e21e1f505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpVelocity: 0
-  controller: {fileID: 1180568998}
-  player: {fileID: 1180568997}
 --- !u!114 &1180568995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1782,7 +1766,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bab03588e5bb68f4186616a8eb17d752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1180568997}
 --- !u!114 &1180568996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1812,25 +1795,22 @@ MonoBehaviour:
   currentMana: 10000
   currentPower: 10000
   gravity: 0
+  chargeRate: 12
+  basePower: 10000
+  maxPower: 20000
+  airControlPercent: 1
+  projectileChargeTime: 1
+  flying: 0
+  jumping: 0
+  overDriveOn: 0
+  poweringUp: 0
+  isGrounded: 1
+  projectileLocked: 0
   healthBar: {fileID: 1911435075}
   manaBar: {fileID: 285744803}
   powerBar: {fileID: 2088545260}
-  basePower: 10000
-  maxPower: 20000
-  chargeRate: 12
-  airControlPercent: 1
-  flying: 0
-  jumping: 0
-  overDrive: 0
-  poweringUp: 0
-  isGrounded: 1
   projectileStart: {fileID: 550679592}
   target: {fileID: 199914875}
-  pfBullet: {fileID: 8044150410664991409, guid: e28ae44b38629d94daa04c2ed0796f8d, type: 3}
-  thisPlayer: {fileID: 1180568998}
-  overDrive2: {fileID: 1180568993}
-  ki: {fileID: 1180568995}
-  jump: {fileID: 1180568994}
 --- !u!114 &1180568998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1845,7 +1825,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentVelocity: 0
   velocityY: 0
-  player: {fileID: 1180568997}
 --- !u!143 &1180568999
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1864,6 +1843,18 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.89, z: 0.03}
+--- !u!114 &1180569000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180568991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d944e3f6defc9cd42b79d57431fedcc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1228702720
 GameObject:
   m_ObjectHideFlags: 0
@@ -1976,11 +1967,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4b742a671f4c818458852f136baf2fb5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.09
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4b742a671f4c818458852f136baf2fb5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.039
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4b742a671f4c818458852f136baf2fb5, type: 3}
       propertyPath: m_LocalRotation.w

@@ -2,11 +2,18 @@ using UnityEngine;
 
 public class Jump : MonoBehaviour
 {
-    public float jumpVelocity;
-    public Controller controller;
-    public Player player;
+    private float jumpVelocity;
 
-    // Update is called once per frame
+    private Controller controller;
+    private GameObject thisGameObject;
+    private Player player;
+
+    void Start()
+    {
+        thisGameObject = GameObject.Find("Player");
+        player = thisGameObject.GetComponent<Player>();
+        controller = thisGameObject.GetComponent<Controller>();
+    }
     public void jump(int jumpCost = 0)
     {
         bool jumping = player.jumping;

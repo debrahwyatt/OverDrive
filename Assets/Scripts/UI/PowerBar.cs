@@ -15,8 +15,4 @@ public class PowerBar : MonoBehaviour
         slider.minValue = min;
         slider.maxValue = max;
     }
-    public float GetCurrentPower()
-    {
-        return slider.value;
-    }
 }

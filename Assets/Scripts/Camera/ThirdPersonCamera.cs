@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ThirdPersonCamera : MonoBehaviour 
@@ -7,11 +5,13 @@ public class ThirdPersonCamera : MonoBehaviour
     public bool lockCursor;
 
     public float mouseSensativity = 10;
-    public Transform target;
-    public float dstFromTarget = 2;
-    public Vector2 pitchMinMax = new Vector2(-40, 85);
+    public float dstFromTarget = 3;
 
     public float rotationSmoothTime = 0.12f;
+    // public Vector2 pitchMinMax = new Vector2(-40, 85);
+
+    public Transform target;
+
     Vector3 rotationSmoothVelocity;
     Vector3 currentRotation;
 
@@ -32,7 +32,7 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         yaw += Input.GetAxis ("Mouse X") * mouseSensativity;
         pitch -= Input.GetAxis ("Mouse Y") * mouseSensativity;
-        pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
+        // pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
 
         currentRotation = Vector3.SmoothDamp(currentRotation, new Vector3(pitch, yaw), ref rotationSmoothVelocity, rotationSmoothTime);
         transform.eulerAngles = currentRotation;

@@ -2,26 +2,32 @@ using UnityEngine;
 
 public class OverDrive : MonoBehaviour
 {
-    public Controller controller;
-    public Player player;
+    private GameObject thisGameObject;
+    private Player player;
+
+    void Start()
+    {
+        thisGameObject = GameObject.Find("Player");
+        player = thisGameObject.GetComponent<Player>();
+    }
 
     public void overDrive(int cost, int gain, int reduction)
     {
-        if (Input.GetKey(KeyCode.LeftShift) && player.currentMana > cost) player.overDrive = true;
-        else player.overDrive = false;
+        if (Input.GetKey(KeyCode.LeftShift) && player.currentMana >= cost) player.overDriveOn = true;
+        else player.overDriveOn = false;
 
-        if (player.currentPower + gain < player.maxPower && player.overDrive)
+        if (player.currentPower + gain < player.maxPower && player.overDriveOn)
         {
             player.currentPower += gain;
             player.ManaAdjust(-cost);
         }
-        if (player.currentPower + gain > player.maxPower && player.overDrive)
+        if (player.currentPower + gain > player.maxPower && player.overDriveOn)
         {
             player.currentPower = player.maxPower;
             player.ManaAdjust((int)(-cost * 0.4f));
         }
 
-        if (player.currentPower - reduction > player.basePower && !player.overDrive) player.currentPower -= reduction;
+        if (player.currentPower - reduction > player.basePower && !player.overDriveOn) player.currentPower -= reduction;
 
         player.SetPower(player.currentPower);
     }
