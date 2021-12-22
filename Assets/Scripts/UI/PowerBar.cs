@@ -14,5 +14,10 @@ public class PowerBar : MonoBehaviour
     {
         slider.minValue = min;
         slider.maxValue = max;
+        SetPower(min);
+    }
+    public int GetPower()
+    {
+        return (int) slider.value;
     }
 }

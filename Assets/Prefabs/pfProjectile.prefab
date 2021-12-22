@@ -106,12 +106,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8044150410664991409}
   - component: {fileID: -1263248204600998747}
-  - component: {fileID: -507926383826801700}
   - component: {fileID: 8309494476708145722}
-  - component: {fileID: -1955291558093011941}
+  - component: {fileID: 704786456922320204}
   m_Layer: 0
   m_Name: pfProjectile
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,7 +124,7 @@ Transform:
   m_GameObject: {fileID: 7365651825778049807}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5281822370483750226}
   m_Father: {fileID: 0}
@@ -143,19 +142,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5367232a63af1a49bd52a224925517d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &-507926383826801700
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7365651825778049807}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.375, y: 0.375, z: 0.375}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &8309494476708145722
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -164,23 +150,24 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7365651825778049807}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 100000000
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 1
---- !u!114 &-1955291558093011941
-MonoBehaviour:
+  m_Interpolate: 1
+  m_Constraints: 126
+  m_CollisionDetection: 0
+--- !u!135 &704786456922320204
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7365651825778049807}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d944e3f6defc9cd42b79d57431fedcc9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0, z: 0}

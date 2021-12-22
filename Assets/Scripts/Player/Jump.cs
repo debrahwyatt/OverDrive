@@ -8,13 +8,15 @@ public class Jump : MonoBehaviour
     private GameObject thisGameObject;
     private Player player;
 
+    int jumpCost = 0;
+
     void Start()
     {
         thisGameObject = GameObject.Find("Player");
         player = thisGameObject.GetComponent<Player>();
         controller = thisGameObject.GetComponent<Controller>();
     }
-    public void jump(int jumpCost = 0)
+    public void jump()
     {
         bool jumping = player.jumping;
         float velocityY = controller.velocityY;
@@ -40,6 +42,6 @@ public class Jump : MonoBehaviour
         }
         controller.velocityY = velocityY;
         player.jumping = jumping;
-        if (player.jumping == true) player.ManaAdjust(-jumpCost);
+        if (player.jumping == true) player.currentMana -= jumpCost;
     }
 }

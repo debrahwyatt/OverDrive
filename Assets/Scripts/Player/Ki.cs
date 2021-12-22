@@ -19,14 +19,16 @@ public class Ki : MonoBehaviour
         if (frame == 1)
         {
             frame = 0;
-            player.ManaAdjust(2);
+            player.currentMana += gain;
         }
     }
-    public void Charging(int gain)
+    public void Recharging(int gain)
     {
+        if (player.projectileLocked) return;
+        
         if (Input.GetKey(KeyCode.E))
         {
-            player.ManaAdjust(gain);
+            player.currentMana += gain;
             player.poweringUp = true;
         }
         else

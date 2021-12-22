@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
 
@@ -6,112 +7,125 @@ public class Player : MonoBehaviour {
     public int currentMana;
     public int currentPower;
     public int gravity; // system static?
-    public int chargeRate;
-
+    public int rechargeRate;
+    public int shootRate;
+    public int startSpeed;
+    public int maxSpeed;
     public int basePower = 10000;
+
     public int maxPower = 20000;
     private int maxHealth = 10000;
     private int maxMana = 10000;
+    private int maxCharge = 11;
 
+    public float currentCharge = 1f;
     public float airControlPercent = 1f;
-    public float projectileChargeTime = 1f;
 
-    public bool flying = true;
+    public bool flying = false;
+    public bool isGrounded = true;
     public bool jumping = false;
     public bool overDriveOn = false;
     public bool poweringUp = false;
-    public bool isGrounded = true;
-    public bool projectileLocked = false;
+    public bool projectileLocked = true;
 
     // Initialize public class objects
     public HealthBar healthBar;
     public ManaBar manaBar;
     public PowerBar powerBar;
-    public Transform projectileStart;
-    public Transform target;
+    public ChargeBar chargeBar;
 
     // Initialize private class objects
-    private GameObject thisGameObject;
     private Ki ki;
     private Jump jump;
     private OverDrive overDrive;
-    private PlayerShoot playerShoot;
+    private Charge charge;
+    private GameObject thisGameObject;
+    private Teleport teleport;
 
     void Start() 
     {
-        QualitySettings.vSyncCount = 0; // Disable vSync
+        // QualitySettings.vSyncCount = 0; // Disable vSync
         Application.targetFrameRate = 60; // Set Framerate
 
         thisGameObject = GameObject.Find("Player");
         ki = thisGameObject.GetComponent<Ki>();
         jump = thisGameObject.GetComponent<Jump>();
+        charge = thisGameObject.GetComponent<Charge>();
+        teleport = thisGameObject.GetComponent<Teleport>();
         overDrive = thisGameObject.GetComponent<OverDrive>();
-        playerShoot = thisGameObject.GetComponent<PlayerShoot>();
 
-        currentPower = basePower;
         currentHealth = maxHealth;
         currentMana = maxMana;
-        gravity = (int) -(currentPower * 0.005f);
-        chargeRate = 25;
+        currentCharge = 1f;
 
         healthBar.SetMaxHealth(maxHealth);
         manaBar.SetMaxMana(maxMana);
         powerBar.SetMinMaxPower(basePower, maxPower);
-        powerBar.SetPower(basePower);
+        chargeBar.SetMaxCharge(maxCharge);
+
     }
 
     void Update() 
     {
+        currentPower = powerBar.GetPower();
+
         if (PauseMenu.GameIsPaused) return;
-        flying = true;
         if (flying == true) gravity = 0;
         else gravity = (int) -(currentPower * 0.005f);
 
-        ki.NaturalGain(50);
-        jump.jump(1);
+        rechargeRate = (int)(currentPower * 0.0025f);
+        shootRate = (int)(currentPower * 0.0005f);
 
-        chargeRate = 50;
-        ki.Charging(chargeRate);
+        startSpeed = (int) (0.003f * currentPower);
+        maxSpeed = (int) (0.006f * currentPower);
 
-        int overDriveCost = 25;
-        int overDriveGain = 40;
-        int overDriveLoss = 4;
-        overDrive.overDrive(overDriveCost, overDriveGain, overDriveLoss);
-
-        playerShoot.Shoot(10);
-
-
-        if (Input.GetKeyUp(KeyCode.G))
+        teleport.Tele(KeyCode.Mouse2);
+        ki.NaturalGain(2);
+        ki.Recharging(rechargeRate);
+        if (!poweringUp)
         {
-            TakeDamage(100);
+            charge.charge(shootRate);
+            charge.shoot();
         }
 
+
+        jump.jump();
+        overDrive.overDrive();
+        
+        SetMana(currentMana);
+        SetHealth(currentHealth);
+        SetPower(currentPower);
+        Debug.Log(currentCharge);
+        SetCharge(currentCharge);
     }
 
-    void TakeDamage(int damage) 
+    // Slider Conditions
+    public void SetHealth(int health) 
     {
-        currentHealth -= damage;
-        healthBar.SetHealth(currentHealth);
-    }
+        currentHealth = health;
+        healthBar.SetHealth(health);
+        if(currentHealth <= 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
 
-    public void ManaAdjust(int difference)
+            Application.Quit();
+        }
+    }
+    public void SetMana(int mana)
     {
-        //never add more than the max
-        if(currentMana + difference < maxMana)
-        {
-            currentMana += difference;
-            manaBar.SetMana(currentMana);
-        }
-        else
-        {
-            currentMana = maxMana;
-        }
+        if(mana >= maxMana) currentMana = maxMana;
+        else currentMana = mana;
+        manaBar.SetMana(mana);
     }
-
     public void SetPower(int power)
     {
+        currentPower = power;
         powerBar.SetPower(power);
     }
-
+    public void SetCharge(float charge)
+    {
+        if (charge >= maxCharge) currentCharge = charge = maxCharge;
+        chargeBar.SetCharge(charge);
+    }
 }
 
